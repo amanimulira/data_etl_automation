@@ -1,33 +1,41 @@
-+----------------+       +----------------+       +----------------------+      +-------------------+
-|  Data Sources   |  -->  |  Ingest Layer   |  -->  |   Raw Zone Storage   | -->  | Processing Layer  |
-|  (Postgres,     |       |  (Connectors)   |       |  (Blob / ADLS / S3)  |      |  (ETL Engine)     |
-|   SQL Server,   |       |  (Python / ADF) |       |                      |      |  (Airflow / Py)   |
-|   CSV/Blob)     |       |                 |       |                      |      |                   |
-+----------------+        +----------------+        +----------------------+      +---------+---------+
-                                                                                      |
-                                                                                      v
-                                                                                +---------------+
-                                                                                |  Staging Zone  |
-                                                                                |  (cleaned /    |
-                                                                                |   validated)   |
-                                                                                +---------------+
-                                                                                      |
-                                                                                      v
-                                                                                +---------------+
-                                                                                |  Warehouse /   |
-                                                                                |  Analytics DB  |
-                                                                                |  (star schema) |
-                                                                                +---------------+
-                                                                                      |
-                                                                                      v
-                                                                      +-------------------------------+
-                                                                      |  Serving Layer                 |
-                                                                      |  - Power BI reports/dashboards |
-                                                                      |  - Power Apps forms/workflows  |
-                                                                      +-------------------------------+
+# Automated ETL Pipeline
 
-Ancillary services: Scheduler (Airflow / Azure Data Factory), Monitoring & Logging (Prometheus / Azure Monitor), CI/CD (GitHub Actions / Azure DevOps), Secrets & IAM (Azure Key Vault / AWS Secrets Manager).
+## Diagram
 
+```
+    +----------------+        +----------------+        +----------------------+      +-------------------+
+    |  Data Sources   |  -->  |  Ingest Layer   |  -->  |   Raw Zone Storage   | -->  | Processing Layer  |
+    |  (Postgres,     |       |  (Connectors)   |       |  (Blob / ADLS / S3)  |      |  (ETL Engine)     |
+    |   SQL Server,   |       |  (Python / ADF) |       |                      |      |  (Airflow / Py)   |
+    |   CSV/Blob)     |       |                 |       |                      |      |                   |
+    +----------------+        +----------------+        +----------------------+      +---------+---------+
+                                                                                                |
+                                                                                                v
+                                                                                        +---------------+
+                                                                                        |  Staging Zone  |
+                                                                                        |  (cleaned /    |
+                                                                                        |   validated)   |
+                                                                                        +---------------+
+                                                                                                |
+                                                                                                v
+                                                                                        +---------------+
+                                                                                        |  Warehouse /   |
+                                                                                        |  Analytics DB  |
+                                                                                        |  (star schema) |
+                                                                                        +---------------+
+                                                                                                |
+                                                                                                v
+                                                                                +-------------------------------+
+                                                                                |  Serving Layer                 |
+                                                                                |  - Power BI reports/dashboards |
+                                                                                |  - Power Apps forms/workflows  |
+                                                                                +-------------------------------+
+
+Ancillary services: Scheduler (Airflow / Azure Data Factory), Monitoring & Logging (Prometheus / Azure Monitor), 
+CI/CD (GitHub Actions / Azure DevOps), Secrets & IAM (Azure Key Vault / AWS Secrets Manager).
+```
+### Project Structure
+```
 project-root/
 ├── README.md
 ├── requirements.txt
@@ -79,3 +87,4 @@ project-root/
 └── .github/
     └── workflows/
         └── ci.yml
+```
