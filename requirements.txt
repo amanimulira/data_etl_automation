@@ -1,0 +1,8 @@
+pandas
+sqlalchemy
+pyodbc
+psycopg2-binary
+azure-storage-blob
+python-dotenv
+nbformat
+jupyterlab
