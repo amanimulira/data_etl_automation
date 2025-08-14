@@ -85,19 +85,25 @@ def get_sales_order_details(engine=None, sales_order_ids=None):
     return pd.read_sql(sql, engine, params=params)
 
 def get_customers(engine=None):
+    from sqlalchemy import text
+    import pandas as pd
+
     if engine is None:
         engine = get_engine_from_env()
+
     sql = text("""
-    SELECT
-        p.BusinessEntityID AS CustomerID,
-        p.FirstName,
-        p.LastName,
-        a.City,
-        a.StateProvinceID,
-        st.Name AS Territory
-    FROM Person.Person p
-    LEFT JOIN Person.PersonAddress pa ON p.BusinessEntityID = pa.BusinessEntityID
-    LEFT JOIN Person.Address a ON pa.AddressID = a.AddressID
-    LEFT JOIN Sales.SalesTerritory st ON st.TerritoryID = a.StateProvinceID
+SELECT
+    c.CustomerID,
+    p.FirstName,
+    p.LastName,
+    a.City,
+    a.StateProvinceID,
+    st.Name AS Territory
+FROM Sales.Customer c
+INNER JOIN Person.Person p ON c.PersonID = p.BusinessEntityID
+LEFT JOIN Person.BusinessEntityAddress bea ON p.BusinessEntityID = bea.BusinessEntityID
+LEFT JOIN Person.Address a ON bea.AddressID = a.AddressID
+LEFT JOIN Person.StateProvince sp ON a.StateProvinceID = sp.StateProvinceID
+LEFT JOIN Sales.SalesTerritory st ON sp.TerritoryID = st.TerritoryID
     """)
     return pd.read_sql(sql, engine)
